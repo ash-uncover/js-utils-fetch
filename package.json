@@ -1,0 +1,47 @@
+{
+  "name": "@uncover/js-utils-fetch",
+  "version": "0.0.1",
+  "author": "aSH <ash.uncover@gmail.com>",
+  "description": "javascript fetch utils",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ash-uncover/js-utils-fetch"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"src/**/*.js\" \"src/**/*.jsx\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test-coverage && npm run lint",
+    "preversion": "npm run lint",
+    "test": "karma start karma.conf.js",
+    "test:debug": "karma start karma.conf-debug.js",
+    "test:watch": "karma start karma.conf-watch.js",
+    "version": "npm run format"
+  },
+  "peerDependencies": {},
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/qunit": "latest",
+    "@types/sinon": "latest",
+    "karma": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-coverage": "latest",
+    "karma-junit-reporter": "latest",
+    "karma-qunit": "latest",
+    "karma-sinon": "latest",
+    "karma-typescript": "latest",
+    "prettier": "latest",
+    "sinon": "latest",
+    "tslint": "latest",
+    "tslint-config-prettier": "latest",
+    "typescript": "latest"
+  },
+  "dependencies": {}
+}
