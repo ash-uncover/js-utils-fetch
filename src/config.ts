@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 const CSRF_TOKEN_DEFAULT = 'Fetch'
 const CSRF_TOKEN_HEADER = 'x-csrf-token'
 
@@ -11,8 +13,8 @@ class Config {
     _csrfEndpoint:string
     _csrfHeader:string
 
-    _beforeHooks:Function[] = []
-    _afterHooks:Function[] = []
+    _beforeHooks:((url: string, request:any) => void)[] = []
+    _afterHooks:((url: string, request:any, reponse:any) => void)[] = []
 
     _debug:boolean
 
@@ -56,11 +58,11 @@ class Config {
         return this._server
     }
 
-    get beforeHooks ():Function[] {
+    get beforeHooks ():((url: string, request:any) => void)[] {
         return this._beforeHooks
     }
 
-    get afterHooks ():Function[] {
+    get afterHooks ():((url: string, request:any, reponse:any) => void)[] {
         return this._afterHooks
     }
 
@@ -74,7 +76,7 @@ class Config {
 
     // Before hooks
 
-    addBeforeHook (callback:Function) {
+    addBeforeHook (callback:(() => void)) {
         this.beforeHooks.push(callback)
     }
 
@@ -93,7 +95,7 @@ class Config {
 
     // After hooks
 
-    addAfterHook (callback:Function) {
+    addAfterHook (callback:(() => void)) {
         this.afterHooks.push(callback)
     }
 
