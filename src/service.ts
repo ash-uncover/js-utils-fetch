@@ -4,12 +4,14 @@ export default class Service {
 
     // Attributes //
 
+    _config:Config
     _api:any
     _url:string
 
     // Constructor //
 
-    constructor (url: string, api:any) {
+    constructor (config:Config, url:string, api:any) {
+        this._config = config
         this._url = url
         this._api = api
     }
@@ -27,7 +29,7 @@ export default class Service {
     // Public methods //
 
     buildUrl (pathUrl:string):string {
-        return `${Config.server}${this.url}${pathUrl}`
+        return `${this._config.server}${this.url}${pathUrl}`
     }
 
     async fetch (pathUrl:string, options:any) {
@@ -52,11 +54,11 @@ export default class Service {
             request.body = options.body
         }
 
-        Config.runBeforeHooks(url, request)
+        this._config.runBeforeHooks(url, request)
 
         const response = await fetch(url, request)
 
-        Config.runAfterHooks(url, request, response)
+        this._config.runAfterHooks(url, request, response)
 
         return response
     }

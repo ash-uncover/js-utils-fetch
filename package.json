@@ -1,6 +1,6 @@
 {
   "name": "@uncover/js-utils-fetch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "aSH <ash.uncover@gmail.com>",
   "description": "javascript fetch utils",
   "license": "ISC",
@@ -8,13 +8,27 @@
     "type": "git",
     "url": "https://github.com/ash-uncover/js-utils-fetch"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "build/cjs/index.js",
+  "types": "build/cjs/index.d.ts",
   "files": [
-    "dist/**/*"
+    "build/**/*"
   ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./build/esm/index.d.ts",
+        "default": "./build/esm/index.js"
+      },
+      "require": {
+        "types": "./build/cjs/index.d.ts",
+        "default": "./build/cjs/index.js"
+      }
+    }
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p ./tsconfig.esm.json",
+    "build:cjs": "tsc -p ./tsconfig.cjs.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"src/**/*.js\" \"src/**/*.jsx\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
