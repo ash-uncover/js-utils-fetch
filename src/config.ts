@@ -16,7 +16,7 @@ class Config {
     _beforeHooks:((url: string, request:any) => void)[] = []
     _afterHooks:((url: string, request:any, reponse:any) => void)[] = []
 
-    _debug:boolean
+    _useDebug:boolean
 
     // Constructor //
 
@@ -25,18 +25,17 @@ class Config {
         useCsrf?:boolean,
         csrfEndpoint?:string,
         csrfHeader?:string,
-        debug?:boolean
+        useDebug?:boolean
     }) {
         this._server = options.server
         this._useCsrf = options.useCsrf || false
         this._csrfEndpoint = options.csrfEndpoint || ''
         this._csrfHeader = options.csrfHeader || ''
+        this._useDebug = options.useDebug || false
 
         this.resetCSRFToken()
         this.resetBeforeHooks()
         this.resetAfterHooks()
-
-        this._debug = options.debug || false
     }
 
     // Getters & Setters //
@@ -98,7 +97,7 @@ class Config {
         if (this._useCsrf) {
             this._beforeHooks.push(this.addCsrfToken.bind(this))
         }
-        if (this._debug) {
+        if (this._useDebug) {
             this._beforeHooks.push(this.logRequest.bind(this))
         }
     }
@@ -120,7 +119,7 @@ class Config {
         if (this._useCsrf) {
             this._afterHooks.push(this.readCsrfToken.bind(this))
         }
-        if (this._debug) {
+        if (this._useDebug) {
             this._afterHooks.push(this.logResponse.bind(this))
         }
     }
@@ -139,7 +138,7 @@ class Config {
     }
 
     logRequest (url:string, request:any) {
-        if (this._debug) {
+        if (this._useDebug) {
             console.log(`REQUEST ${request.method} ${url}`)
             console.log('  - Options:')
             Object.keys(request).forEach((option:string) => {
@@ -157,7 +156,7 @@ class Config {
     }
 
     logResponse (url:string, request:any, response:any) {
-        if (this._debug) {
+        if (this._useDebug) {
             console.log(`RESPONSE ${request.method} ${url}`)
             if (response.headers) {
                 console.log('  - Headers:')
