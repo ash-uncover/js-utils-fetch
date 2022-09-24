@@ -8,10 +8,14 @@ QUnit.module('Service', (globalHooks) => {
         path: () => {}
     }
 
+    const config = new Config({
+        server: 'http://server'
+    })
+
     let service
 
     globalHooks.beforeEach(() => {
-        service = new Service(url, api)
+        service = new Service(config, url, api)
     })
 
     /* TEST CASES */
@@ -35,7 +39,7 @@ QUnit.module('Service', (globalHooks) => {
             // Execution
             const fullUrl = service.buildUrl(pathUrl)
             // Assertion
-            assert.equal(`${Config.server}${url}${pathUrl}`, fullUrl, 'the correct url was built')
+            assert.equal(`${config.server}${url}${pathUrl}`, fullUrl, 'the correct url was built')
         })
     })
 })

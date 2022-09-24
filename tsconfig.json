@@ -1,25 +1,23 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "checkJs": true,
-        "declaration": true,
-        "lib": [
-            "esnext",
-            "DOM",
-        ],
-        "noImplicitAny": true,
-        "outDir": "./build",
-        "sourceMap": true,
-        "strict": true,
-		"target": "es5"
-    },
-    "exclude": [
-        "node_modules",
-        "**/*.test.*",
-        "**/*..*",
-    ],
-    "include": [
-        "src",
-        "tools",
-    ]
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5"
+  },
+  "files": [
+    "./src/index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.*"
+  ]
 }

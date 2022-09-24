@@ -1,7 +1,6 @@
 /* tslint:disable:no-console */
 
 const CSRF_TOKEN_DEFAULT = 'Fetch'
-const CSRF_TOKEN_HEADER = 'x-csrf-token'
 
 class Config {
 
@@ -9,6 +8,7 @@ class Config {
 
     _server:string
 
+    _useCsrf:boolean = false
     _csrfToken:string = ''
     _csrfEndpoint:string
     _csrfHeader:string
@@ -16,20 +16,26 @@ class Config {
     _beforeHooks:((url: string, request:any) => void)[] = []
     _afterHooks:((url: string, request:any, reponse:any) => void)[] = []
 
-    _debug:boolean
+    _useDebug:boolean
 
     // Constructor //
 
-    constructor () {
-        this._server = 'http://localhost:1337'
-        this._csrfEndpoint = '/api/internal/irpa/profile/v1/profile'
-        this._csrfHeader = CSRF_TOKEN_HEADER
+    constructor (options:{
+        server:string,
+        useCsrf?:boolean,
+        csrfEndpoint?:string,
+        csrfHeader?:string,
+        useDebug?:boolean
+    }) {
+        this._server = options.server
+        this._useCsrf = options.useCsrf || false
+        this._csrfEndpoint = options.csrfEndpoint || ''
+        this._csrfHeader = options.csrfHeader || ''
+        this._useDebug = options.useDebug || false
 
         this.resetCSRFToken()
         this.resetBeforeHooks()
         this.resetAfterHooks()
-
-        this._debug = false
     }
 
     // Getters & Setters //
@@ -87,10 +93,13 @@ class Config {
     }
 
     resetBeforeHooks () {
-        this._beforeHooks = [
-            this.addCsrfToken.bind(this),
-            this.logRequest.bind(this),
-        ]
+        this._beforeHooks = []
+        if (this._useCsrf) {
+            this._beforeHooks.push(this.addCsrfToken.bind(this))
+        }
+        if (this._useDebug) {
+            this._beforeHooks.push(this.logRequest.bind(this))
+        }
     }
 
     // After hooks
@@ -106,10 +115,13 @@ class Config {
     }
 
     resetAfterHooks () {
-        this._afterHooks = [
-            this.readCsrfToken.bind(this),
-            this.logResponse.bind(this),
-        ]
+        this._afterHooks = []
+        if (this._useCsrf) {
+            this._afterHooks.push(this.readCsrfToken.bind(this))
+        }
+        if (this._useDebug) {
+            this._afterHooks.push(this.logResponse.bind(this))
+        }
     }
 
     // Hooks
@@ -126,7 +138,7 @@ class Config {
     }
 
     logRequest (url:string, request:any) {
-        if (this._debug) {
+        if (this._useDebug) {
             console.log(`REQUEST ${request.method} ${url}`)
             console.log('  - Options:')
             Object.keys(request).forEach((option:string) => {
@@ -144,7 +156,7 @@ class Config {
     }
 
     logResponse (url:string, request:any, response:any) {
-        if (this._debug) {
+        if (this._useDebug) {
             console.log(`RESPONSE ${request.method} ${url}`)
             if (response.headers) {
                 console.log('  - Headers:')
@@ -156,4 +168,4 @@ class Config {
     }
 }
 
-export default new Config()
+export default Config
