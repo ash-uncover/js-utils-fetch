@@ -1,16 +1,14 @@
-import Config from './config.js'
-
 export default class Service {
 
     // Attributes //
 
-    _config:Config
+    _config:any
     _api:any
     _url:string
 
     // Constructor //
 
-    constructor (config:Config, url:string, api:any) {
+    constructor (config:any, url:string, api:any) {
         this._config = config
         this._url = url
         this._api = api
