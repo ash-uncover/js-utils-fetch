@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "author": "aSH <ash.uncover@gmail.com>",
   "description": "javascript fetch utils",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ash-uncover/js-utils-fetch"
