@@ -2,7 +2,7 @@
 
 const CSRF_TOKEN_DEFAULT = 'Fetch'
 
-class Config {
+export class Config {
 
     // Attributes //
 
@@ -167,5 +167,3 @@ class Config {
         }
     }
 }
-
-export default Config
