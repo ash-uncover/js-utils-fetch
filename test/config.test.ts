@@ -1,4 +1,4 @@
-import Config from '../src/config'
+import { Config } from '../src/config'
 import * as sinon from 'sinon'
 
 QUnit.module('Config', () => {
