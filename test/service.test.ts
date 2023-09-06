@@ -1,5 +1,5 @@
-import Config from '../src/config'
-import Service from '../src/service'
+import { Config } from '../src/config'
+import { Service } from '../src/service'
 
 QUnit.module('Service', (globalHooks) => {
 
