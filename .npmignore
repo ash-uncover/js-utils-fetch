@@ -1,7 +1,6 @@
 src
 test
 
-.babelrc
-.prettierrc
 tsconfig.json
-tslint.json
+tsconfig.cjs.json
+tsconfig.esm.json
