@@ -127,6 +127,9 @@ export class Config {
     // Hooks
 
     addCsrfToken (url:string, request:any) {
+        if (!request.headers) {
+            request.headers = new Headers()
+        }
         request.headers.set(this.csrfHeader, this.csrfToken)
     }
 
