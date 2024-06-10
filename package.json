@@ -1,6 +1,6 @@
 {
   "name": "@uncover/js-utils-fetch",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "aSH <ash.uncover@gmail.com>",
   "description": "javascript fetch utils",
   "license": "MIT",
