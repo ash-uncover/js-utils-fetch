@@ -8,20 +8,20 @@
     "type": "git",
     "url": "https://github.com/ash-uncover/js-utils-fetch"
   },
-  "main": "build/cjs/index.js",
-  "types": "build/cjs/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.ts",
   "files": [
-    "build/**/*"
+    "dist/**/*"
   ],
   "exports": {
     ".": {
       "import": {
-        "types": "./build/esm/index.d.ts",
-        "default": "./build/esm/index.js"
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
       },
       "require": {
-        "types": "./build/cjs/index.d.ts",
-        "default": "./build/cjs/index.js"
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
       }
     }
   },

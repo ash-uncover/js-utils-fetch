@@ -5,7 +5,7 @@
       "ES6",
       "DOM"
     ],
-    "outDir": "./build/cjs",
+    "outDir": "./dist/cjs",
     "module": "CommonJS",
     "moduleResolution": "Node",
     "target": "ES5"
