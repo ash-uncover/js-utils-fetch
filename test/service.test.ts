@@ -1,7 +1,7 @@
 import { Config } from '../src/config'
 import { Service } from '../src/service'
 
-QUnit.module('Service', (globalHooks) => {
+describe('Service', () => {
 
   const url = 'url'
   const api = {
@@ -12,34 +12,66 @@ QUnit.module('Service', (globalHooks) => {
     server: 'http://server'
   })
 
-  let service
+  let service: Service
+  let fetchMock: any
+  const response = { data: 100 }
 
-  globalHooks.beforeEach(() => {
+  beforeEach(() => {
     service = new Service(config, url, api)
   })
 
   /* TEST CASES */
 
-  QUnit.module('constructor', () => {
+  // #region constructor
+  describe('constructor', () => {
 
-    QUnit.test('proper instanciation', async (assert) => {
+    test('proper instanciation', () => {
       // Declaration
       // Execution
       // Assertion
-      assert.equal(service.url, url, 'the url was stored in the service')
-      assert.equal(service.api, api, 'the api definition was stored in the service')
+      expect(service.url).toEqual(url)
+      expect(service.api).toEqual(api)
     })
   })
+  // #endregion
 
-  QUnit.module('buildUrl', () => {
+  // #region buildUrl
+  describe('buildUrl', () => {
 
-    QUnit.test('proper instanciation', async (assert) => {
+    test('proper instanciation', () => {
       // Declaration
       const pathUrl = 'path'
       // Execution
       const fullUrl = service.buildUrl(pathUrl)
       // Assertion
-      assert.equal(`${config.server}${url}${pathUrl}`, fullUrl, 'the correct url was built')
+      expect(`${config.server}${url}${pathUrl}`).toEqual(fullUrl)
     })
   })
+  // #endregion
+
+  // #region fetch
+  describe('fetch', () => {
+
+    beforeEach(() => {
+      // @ts-ignore
+      global.fetch = jest.fn(() => Promise.resolve(response))
+    })
+  
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    test('proper instanciation', () => {
+      // Declaration
+      const pathUrl = 'path'
+      const options = {}
+      // Execution
+      return service.fetch(pathUrl, options)
+      .then(data => {
+        // Assertion
+        expect(data).toEqual(response)
+      })
+    })
+  })
+  // #endregion
 })

@@ -1,71 +1,79 @@
 import { Config } from '../src/config'
-import * as sinon from 'sinon'
 
-QUnit.module('Config', () => {
+describe('Config', () => {
 
-  let config
+  let config: Config
 
   const server = 'http://server'
   const useCsrf = true
   const csrfEndpoint = 'csrfEndpoint'
-  const csrfHeader = 'csrfHeader'
+  const csrfHeader = 'Content-Type'
   const useDebug = true
 
-  /* TEST CASES */
-
-  QUnit.module('constructor', (hooks) => {
-
-    hooks.beforeEach(() => {
-      config = new Config({
-        server,
-        useCsrf,
-        csrfEndpoint,
-        csrfHeader,
-        useDebug
-      })
-    })
-
-    QUnit.test('default values', async (assert) => {
-      // Declaration
-      // Execution
-      // Assertion
-      assert.equal(config.server, server)
-      assert.equal(config.csrfToken, 'Fetch')
-      assert.equal(config.csrfEndpoint, csrfEndpoint)
-      assert.equal(config.beforeHooks.length, 2, 'contains 2 hooks initially')
-      assert.equal(config.afterHooks.length, 2, 'contains 2 hooks initially')
+  beforeEach(() => {
+    config = new Config({
+      server,
+      useCsrf,
+      csrfEndpoint,
+      csrfHeader,
+      useDebug
     })
   })
 
-  // csrfToken //
+  /* TEST CASES */
 
-  QUnit.module('csrfToken', () => {
+  // #region constructor
+  describe('constructor', () => {
 
-    QUnit.test('can be changed', async (assert) => {
+    test('default values', () => {
+      // Declaration
+      // Execution
+      // Assertion
+      expect(config.server).toEqual(server)
+      expect(config.csrfToken).toEqual('Fetch')
+      expect(config.csrfEndpoint).toEqual(csrfEndpoint)
+      expect(config.beforeHooks.length).toEqual(2)
+      expect(config.afterHooks.length).toEqual(2)
+    })
+
+    test('csrfHeader', () => {
+      // Declaration
+      // Execution
+      config.csrfHeader = 'newHeader'
+      // Assertion
+      expect(config.csrfHeader).toEqual('newHeader')
+    })
+  })
+  // #endregion
+
+  // #region csrfToken
+  describe('csrfToken', () => {
+
+    test('can be changed', () => {
       // Declaration
       const token = 'token'
       // Execution
       config.csrfToken = token
       // Assertion
-      assert.equal(config.csrfToken, token, 'token was updated')
+      expect(config.csrfToken).toEqual(token)
     })
 
-    QUnit.test('can be reseted', async (assert) => {
+    test('can be reseted', () => {
       // Declaration
       const token = 'token'
       // Execution
       config.csrfToken = token
       config.resetCSRFToken()
       // Assertion
-      assert.equal(config.csrfToken, 'Fetch', 'token was reseted')
+      expect(config.csrfToken).toEqual('Fetch')
     })
   })
+  // #endregion
 
-  // beforeHooks //
+  // #region beforeHooks
+  describe('beforeHooks', () => {
 
-  QUnit.module('beforeHooks', (hooks) => {
-
-    hooks.beforeEach(() => {
+    beforeEach(() => {
       config = new Config({
         server,
         useCsrf: false,
@@ -73,60 +81,61 @@ QUnit.module('Config', () => {
       })
     })
 
-    QUnit.test('can be added', async (assert) => {
+    test('can be added', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       // Execution
       config.addBeforeHook(stubHook)
       // Assertion
-      assert.equal(config.beforeHooks.length, 1, 'contains 1 hooks')
-      assert.equal(stubHook.callCount, 0, 'hook was never called')
+      expect(config.beforeHooks.length).toEqual(1)
+      expect(stubHook.mock.calls).toHaveLength(0)
     })
 
-    QUnit.test('can be reseted', async (assert) => {
+    test('can be reseted', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       config.addBeforeHook(stubHook)
       // Execution
       config.resetBeforeHooks()
       // Assertion
-      assert.equal(config.beforeHooks.length, 0, 'contains 0 hooks')
-      assert.equal(stubHook.callCount, 0, 'hook was never called')
+      expect(config.beforeHooks.length).toEqual(0)
+      expect(stubHook.mock.calls).toHaveLength(0)
     })
 
-    QUnit.test('can be run', async (assert) => {
+    test('can be run', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       config.addBeforeHook(stubHook)
       const url = 'url'
-      const request = { headers: { set: sinon.spy() } }
+      const request = { headers: { set: jest.fn() } }
       // Execution
       config.runBeforeHooks(url, request)
       // Assertion
-      assert.equal(stubHook.callCount, 1, 'hook was called once')
-      assert.equal(stubHook.calledOnceWith(url, request), true, 'the hook was called as expected')
+      expect(stubHook.mock.calls).toHaveLength(1)
+      expect(stubHook.mock.calls[0][0]).toEqual(url)
+      expect(stubHook.mock.calls[0][1]).toEqual(request)
     })
 
-    QUnit.test('is called for each run', async (assert) => {
+    test('is called for each run', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       config.addBeforeHook(stubHook)
       const url = 'url'
-      const request = { headers: { set: sinon.spy() } }
+      const request = { headers: { set: jest.fn() } }
       // Execution
       config.runBeforeHooks(url, request)
       config.runBeforeHooks(url, request)
       config.runBeforeHooks(url, request)
       // Assertion
-      assert.equal(stubHook.callCount, 3, 'hook was called three times')
+      expect(stubHook.mock.calls).toHaveLength(3)
     })
   })
+  // #endregion
 
-  // afterHooks //
+  // #region afterHooks
+  describe('afterHooks', () => {
 
-  QUnit.module('afterHooks', (hooks) => {
-
-    hooks.beforeEach(() => {
+    beforeEach(() => {
       config = new Config({
         server,
         useCsrf: false,
@@ -134,86 +143,100 @@ QUnit.module('Config', () => {
       })
     })
 
-    QUnit.test('can be added', async (assert) => {
+    test('can be added', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       // Execution
       config.addAfterHook(stubHook)
       // Assertion
-      assert.equal(config.afterHooks.length, 1, 'contains 1 hooks')
-      assert.equal(stubHook.callCount, 0, 'hook was never called')
+      expect(config.afterHooks.length).toEqual(1)
+      expect(stubHook.mock.calls).toHaveLength(0)
     })
 
-    QUnit.test('can be reseted', async (assert) => {
+    test('can be reseted', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       config.addAfterHook(stubHook)
       // Execution
       config.resetAfterHooks()
       // Assertion
-      assert.equal(config.afterHooks.length, 0, 'contains 0 hooks')
-      assert.equal(stubHook.callCount, 0, 'hook was never called')
+      expect(config.afterHooks.length).toEqual(0)
+      expect(stubHook.mock.calls).toHaveLength(0)
     })
 
-    QUnit.test('can be run', async (assert) => {
+    test('can be run', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       config.addAfterHook(stubHook)
       const url = 'url'
-      const request = { headers: { set: sinon.spy() } }
-      const response = { headers: { get: sinon.spy() } }
+      const request = { headers: { set: jest.fn() } }
+      const response = { headers: { get: jest.fn() } }
       // Execution
       config.runAfterHooks(url, request, response)
       // Assertion
-      assert.equal(stubHook.callCount, 1, 'hook was called once')
-      assert.equal(stubHook.calledOnceWith(url, request, response), true, 'the hook was called as expected')
+      expect(stubHook.mock.calls).toHaveLength(1)
+      expect(stubHook.mock.calls[0][0]).toEqual(url)
+      expect(stubHook.mock.calls[0][1]).toEqual(request)
+      expect(stubHook.mock.calls[0][2]).toEqual(response)
     })
 
-    QUnit.test('is called for each run', async (assert) => {
+    test('is called for each run', () => {
       // Declaration
-      const stubHook = sinon.spy()
+      const stubHook = jest.fn()
       config.addAfterHook(stubHook)
       const url = 'url'
-      const request = { headers: { set: sinon.spy() } }
-      const response = { headers: { get: sinon.spy() } }
+      const request = { headers: { set: jest.fn() } }
+      const response = { headers: { get: jest.fn() } }
       // Execution
       config.runAfterHooks(url, request, response)
       config.runAfterHooks(url, request, response)
       config.runAfterHooks(url, request, response)
       // Assertion
-      assert.equal(stubHook.callCount, 3, 'hook was called three times')
+      expect(stubHook.mock.calls).toHaveLength(3)
     })
   })
+  // #endregion
 
-  // addCsrfToken //
+  // #region addCsrfToken
+  describe('addCsrfToken', () => {
 
-  QUnit.module('addCsrfToken', () => {
-
-    QUnit.test('properly read the response header', async (assert) => {
+    test('properly read the response header', () => {
       // Declaration
       const url = 'url'
-      const stubHeader = sinon.stub()
+      const stubHeader = jest.fn()
       const request = { headers: { set: stubHeader } }
       // Execution
       config.addCsrfToken(url, request)
       // Assertion
-      assert.equal(stubHeader.callCount, 1, 'the update header was called')
-      assert.equal(stubHeader.calledOnceWith(config.csrfHeader, config.csrfToken), true, 'the actual token was added')
+      expect(stubHeader.mock.calls).toHaveLength(1)
+      expect(stubHeader.mock.calls[0][0]).toEqual(config.csrfHeader)
+      expect(stubHeader.mock.calls[0][1]).toEqual(config.csrfToken)
+    })
+
+    test('with no headers', () => {
+      // Declaration
+      const url = 'url'
+      const stubHeader = jest.fn()
+      const request: any = {}
+      // Execution
+      config.addCsrfToken(url, request)
+      // Assertion
+      expect(request.headers).toBeDefined()
     })
   })
+  // #endregion
+  
+  // #region readCsrfToken
+  describe('readCsrfToken', () => {
 
-  // readCsrfToken //
-
-  QUnit.module('readCsrfToken', () => {
-
-    QUnit.test('properly read the response header', async (assert) => {
+    test('properly read the response header', () => {
       // Declaration
       const token = 'token'
       const url = 'url'
-      const request = { headers: { set: sinon.spy() } }
+      const request = { headers: { set: jest.fn() } }
       const response = {
         headers: {
-          get: (header) => {
+          get: (header: string) => {
             return header === config.csrfHeader ? token : null
           }
         }
@@ -221,7 +244,42 @@ QUnit.module('Config', () => {
       // Execution
       config.readCsrfToken(url, request, response)
       // Assertion
-      assert.equal(config.csrfToken, token, 'token was updated')
+      expect(config.csrfToken).toEqual(token)
     })
   })
+  // #endregion
+
+  // #region logRequest
+  describe('logRequest', () => {
+
+    test('properly log the request', () => {
+      // Declaration
+      const url = 'url'
+      const request = { 
+        headers: { forEach: (fn: any) => fn() },
+        option: 'option'
+      }
+      // Execution
+      config.logRequest(url, request)
+    })
+  })
+  // #endregion
+
+  // #region logResponse
+  describe('logResponse', () => {
+
+    test('properly log the request', () => {
+      // Declaration
+      const url = 'url'
+      const request = { 
+        method: 'method'
+      }
+      const response = { 
+        headers: { forEach: (fn: any) => fn() },
+      }
+      // Execution
+      config.logResponse(url, request, response)
+    })
+  })
+  // #endregion
 })
