@@ -1,6 +1,6 @@
 {
   "name": "@uncover/js-utils-fetch",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "author": "aSH <ash.uncover@gmail.com>",
   "description": "javascript fetch utils",
   "license": "MIT",
@@ -31,21 +31,22 @@
     "build:cjs": "tsc -p ./tsconfig.cjs.json",
     "test": "karma start karma.conf.js",
     "test:debug": "karma start karma.conf-debug.js",
-    "test:watch": "karma start karma.conf-watch.js"
+    "test:watch": "karma start karma.conf-watch.js",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@types/node": "20.5.9",
-    "@types/qunit": "2.19.6",
-    "@types/sinon": "10.0.16",
-    "karma": "6.4.2",
+    "@types/node": "22.14.0",
+    "@types/qunit": "2.19.12",
+    "@types/sinon": "17.0.4",
+    "husky": "9.1.7",
+    "karma": "6.4.4",
     "karma-chrome-launcher": "3.2.0",
     "karma-coverage": "2.2.1",
     "karma-junit-reporter": "2.0.1",
-    "karma-qunit": "4.1.2",
+    "karma-qunit": "4.2.1",
     "karma-sinon": "1.0.5",
     "karma-typescript": "5.5.4",
-    "sinon": "15.2.0",
-    "typescript": "5.2.2"
-  },
-  "dependencies": {}
+    "sinon": "20.0.0",
+    "typescript": "5.8.3"
+  }
 }

@@ -9,6 +9,3 @@ build
 dist
 dist-dbg
 __coverage
-
-# Config files
-spa.config.js
